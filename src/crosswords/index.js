@@ -6,15 +6,14 @@ import * as functionality from './functionality';
 
 const startUsage = process.cpuUsage();
 
-let cw = structure.createEmptyCrossword(4, 5);
-cw = structure.fillRandomBlackBoxes(cw, 4);
-cw = structure.setWordNumbers(cw);
+let crossword = structure.createEmptyCrossword(4, 5);
+crossword.grid = structure.fillRandomBlackBoxes(crossword.grid, 4);
+crossword = structure.setWordNumbers(crossword);
 
 promisifications.readFilePromisified(wordListPath)
     .then(wordList => {
-        console.log('inside read promise', wordList.split('\n')[ 9 ]);
-        cw = functionality.getFilledCrossword(wordList.split('\n'), cw);
-        structure.writeCrossword(cw);
+        crossword = functionality.getFilledCrossword(crossword, wordList.split('\n'));
+        structure.writeCrossword(crossword);
         console.log('usage2: ', process.cpuUsage(startUsage));
     })
     .catch(error => {

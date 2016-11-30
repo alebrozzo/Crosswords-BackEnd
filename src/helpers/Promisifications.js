@@ -3,7 +3,7 @@ import { readFile } from 'fs';
 
 function readFilePromisified(filename) {
     return new Promise(
-        function (resolve, reject) {
+        (resolve, reject) => {
             readFile(filename, { encoding: 'utf8' },
                 (error, data) => {
                     if (error) {
