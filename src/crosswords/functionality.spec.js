@@ -1,3 +1,4 @@
+/* eslint max-lines: "off" */
 /* eslint no-magic-numbers: "off" */
 /* eslint no-unused-expressions: "off" */
 /* eslint no-sync: "off" */
@@ -16,64 +17,68 @@ describe('Pattern finding, empty', () => {
     grid[ 1 ][ 2 ] = structure.BlackBox;
     grid[ 2 ][ 1 ] = structure.BlackBox;
     grid[ 3 ][ 4 ] = structure.BlackBox;
+    // [ _, _, _, #, _ ]
+    // [ _, _, #, _, _ ]
+    // [ _, #, _, _, _ ]
+    // [ _, _, _, _, # ]
 
     it('should match empty Horizontal, next to border', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { row: 0, col: 0 }, 'H');
+        const pattern = functionality.getSearchPattern(cw, { VIndex: 0, HIndex: 0 }, 'H');
         expect(pattern).to.equal('^\\w\\w\\w$');
     });
 
     it('should match empty Vertical, next to border', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { row: 0, col: 4 }, 'V');
+        const pattern = functionality.getSearchPattern(cw, { VIndex: 0, HIndex: 4 }, 'V');
         expect(pattern).to.equal('^\\w\\w\\w$');
     });
 
     it('should match empty Horizontal, next to white box', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { row: 3, col: 2 }, 'H');
+        const pattern = functionality.getSearchPattern(cw, { VIndex: 3, HIndex: 2 }, 'H');
         expect(pattern).to.equal('^\\w\\w\\w\\w$');
     });
 
     it('should match empty Vertical, next to white box', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { row: 2, col: 0 }, 'V');
+        const pattern = functionality.getSearchPattern(cw, { VIndex: 2, HIndex: 0 }, 'V');
         expect(pattern).to.equal('^\\w\\w\\w\\w$');
     });
 
     it('should match empty Horizontal, prior is black box', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { row: 1, col: 3 }, 'H');
+        const pattern = functionality.getSearchPattern(cw, { VIndex: 1, HIndex: 3 }, 'H');
         expect(pattern).to.equal('^\\w\\w$');
     });
 
     it('should match empty Vertical, prior is black box', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { row: 1, col: 3 }, 'V');
+        const pattern = functionality.getSearchPattern(cw, { VIndex: 1, HIndex: 3 }, 'V');
         expect(pattern).to.equal('^\\w\\w\\w$');
     });
 
     it('should match empty Horizontal, last white box', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { row: 3, col: 3 }, 'H');
+        const pattern = functionality.getSearchPattern(cw, { VIndex: 3, HIndex: 3 }, 'H');
         expect(pattern).to.equal('^\\w\\w\\w\\w$');
     });
 
     it('should match empty Vertical, last white box', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { row: 3, col: 3 }, 'V');
+        const pattern = functionality.getSearchPattern(cw, { VIndex: 3, HIndex: 3 }, 'V');
         expect(pattern).to.equal('^\\w\\w\\w$');
     });
 
     it('should match empty Horizontal, begining of word', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { row: 2, col: 2 }, 'H');
+        const pattern = functionality.getSearchPattern(cw, { VIndex: 2, HIndex: 2 }, 'H');
         expect(pattern).to.equal('^\\w\\w\\w$');
     });
 
     it('should match empty Vertical, begining of word', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { row: 2, col: 2 }, 'V');
+        const pattern = functionality.getSearchPattern(cw, { VIndex: 2, HIndex: 2 }, 'V');
         expect(pattern).to.equal('^\\w\\w$');
     });
 
@@ -88,40 +93,44 @@ describe('Pattern finding, with letters', () => {
     grid[ 2 ][ 2 ] = 'P';
     grid[ 2 ][ 3 ] = 'U';
     grid[ 3 ][ 3 ] = 'Z';
+    // [ _, _, _, #, _ ]
+    // [ _, _, #, _, _ ]
+    // [ _, #, P, U, _ ]
+    // [ _, _, _, Z, # ]
 
     it('should match pattern Horizontal, begining of word', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { row: 2, col: 2 }, 'H');
+        const pattern = functionality.getSearchPattern(cw, { VIndex: 2, HIndex: 2 }, 'H');
         expect(pattern).to.equal('^PU\\w$');
     });
 
     it('should match pattern Vertical, begining of word', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { row: 2, col: 2 }, 'V');
+        const pattern = functionality.getSearchPattern(cw, { VIndex: 2, HIndex: 2 }, 'V');
         expect(pattern).to.equal('^P\\w$');
     });
 
     it('should match pattern Horizontal, middle of word', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { row: 2, col: 3 }, 'H');
+        const pattern = functionality.getSearchPattern(cw, { VIndex: 2, HIndex: 3 }, 'H');
         expect(pattern).to.equal('^PU\\w$');
     });
 
     it('should match pattern Vertical, middle of word', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { row: 2, col: 3 }, 'V');
+        const pattern = functionality.getSearchPattern(cw, { VIndex: 2, HIndex: 3 }, 'V');
         expect(pattern).to.equal('^\\wUZ$');
     });
 
     it('should match pattern Horizontal, end of word', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { row: 3, col: 3 }, 'H');
+        const pattern = functionality.getSearchPattern(cw, { VIndex: 3, HIndex: 3 }, 'H');
         expect(pattern).to.equal('^\\w\\w\\wZ$');
     });
 
     it('should match pattern Vertical, end of word', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { row: 3, col: 3 }, 'V');
+        const pattern = functionality.getSearchPattern(cw, { VIndex: 3, HIndex: 3 }, 'V');
         expect(pattern).to.equal('^\\wUZ$');
     });
 
@@ -278,12 +287,12 @@ describe('Pattern conflict', () => {
     const crossword = structure.setWordNumbers(cwInit);
 
     it('should return false for LE', () => {
-        const hasConflict = functionality.patternConflictsWithVerticals(dictionary, crossword, 2);
+        const hasConflict = functionality.existVerticalWithCurentHorizontal(dictionary, crossword, 2);
         expect(hasConflict).to.be.false;
     });
     
     it('should return true for LE', () => {
-        const hasConflict = functionality.patternConflictsWithVerticals(shortDictionary, crossword, 2);
+        const hasConflict = functionality.existVerticalWithCurentHorizontal(shortDictionary, crossword, 2);
         expect(hasConflict).to.be.true;
     });
     

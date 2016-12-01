@@ -3,8 +3,13 @@ import { BlackBox } from './structure';
 
 // creates a regular expression search pattern that can be used to search words in ditionary
 function getSearchPattern(grid, cell, direction) {
-    let currentRow = cell.row;
-    let currentCol = cell.col;
+
+    // verify the direction is either H or V
+    if (direction !== 'H' && direction !== 'V')
+        throw new Exception('Invalid direction value on write word');
+
+    let currentRow = cell.VIndex;
+    let currentCol = cell.HIndex;
     let pattern = '';
 
     if (direction === 'H') {
@@ -83,12 +88,12 @@ function writeWord(crossword, direction, index, word) {
 }
 
 // Verify if by adding the specified horizontal word we can find vertical words that will fit.
-function patternConflictsWithVerticals(dictionary, currentCrossword, index) {
+function existVerticalWithCurentHorizontal(dictionary, currentCrossword, index) {
     const currentWord = currentCrossword.horizontalWords[ index ];
     let hasConflict = false;
     for (let i = 0; i < currentWord.length; i++) {
         const searchPattern = getSearchPattern(currentCrossword.grid, { HIndex: currentWord.cell.HIndex + i, VIndex: currentWord.cell.VIndex }, 'V');
-        if (searchPattern !== '^\\w$' && findWord(dictionary, searchPattern) === null) {
+        if (searchPattern !== '^\\w$' /* single letter pattern is ignored */ && findWord(dictionary, searchPattern) === null) {
             hasConflict = true;
             break;
         }
@@ -109,7 +114,7 @@ function fillNextHorizontalWord(crossword, dictionary, index) {
     do {
         potentialWord = findWord(dictionary, searchPattern, wordsSkipped);
         if (potentialWord !== null) {
-            if (!patternConflictsWithVerticals(dictionary, currentCrossword, index)) {
+            if (!existVerticalWithCurentHorizontal(dictionary, currentCrossword, index)) {
                 currentCrossword = writeWord(currentCrossword, 'H', index, potentialWord);
                 nextCrossword = fillNextHorizontalWord(currentCrossword, dictionary, index + 1);
                 wordsSkipped++;
@@ -122,4 +127,4 @@ function fillNextHorizontalWord(crossword, dictionary, index) {
     return nextCrossword;
 }
 
-export { findWord, writeWord, getSearchPattern, patternConflictsWithVerticals, fillNextHorizontalWord };
+export { findWord, writeWord, getSearchPattern, existVerticalWithCurentHorizontal, fillNextHorizontalWord };
