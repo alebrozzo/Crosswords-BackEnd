@@ -68,7 +68,7 @@ export default {
     ],
     module: {
         loaders: [
-            { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel' },
+            // { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel' },
             { test: /\.eot(\?v=\d+.\d+.\d+)?$/, loader: 'url?name=[name].[ext]' },
             { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url?limit=10000&mimetype=application/font-woff&name=[name].[ext]' },
             { test: /\.ttf(\?v=\d+.\d+.\d+)?$/, loader: 'url?limit=10000&mimetype=application/octet-stream&name=[name].[ext]' },
@@ -77,6 +77,6 @@ export default {
             { test: /\.ico$/, loader: 'file?name=[name].[ext]' },
             // { test: /(\.css|\.scss)$/, loader: ExtractTextPlugin.extract('css?sourceMap!postcss!sass?sourceMap') }
         ]
-    },
+    }
     // postcss: () => [ autoprefixer ]
 };

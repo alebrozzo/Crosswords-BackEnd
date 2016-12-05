@@ -3,13 +3,16 @@
 /* eslint no-unused-expressions: "off" */
 /* eslint no-sync: "off" */
 
-import { expect } from 'chai';
-import fs from 'fs';
+const chai = require('chai');
+const expect = chai.expect;
 
-import Exception from '../helpers/exceptions';
-import * as structure from './structure';
-import * as functionality from './functionality';
-import wordListPath from 'word-list';
+const fs = require('fs');
+
+const exceptions = require('../helpers/exceptions');
+const Exception = exceptions.Exception;
+const structure = require('./structure');
+const functionality = require('./functionality');
+const wordListPath = require('word-list');
 
 describe('Pattern finding, empty', () => {
     const grid = structure.createEmptyCrossword(4, 5).grid;
@@ -24,61 +27,61 @@ describe('Pattern finding, empty', () => {
 
     it('should match empty Horizontal, next to border', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { VIndex: 0, HIndex: 0 }, 'H');
+        const pattern = functionality.getSearchPattern(cw, { row: 0, col: 0 }, 'H');
         expect(pattern).to.equal('^\\w\\w\\w$');
     });
 
     it('should match empty Vertical, next to border', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { VIndex: 0, HIndex: 4 }, 'V');
+        const pattern = functionality.getSearchPattern(cw, { row: 0, col: 4 }, 'V');
         expect(pattern).to.equal('^\\w\\w\\w$');
     });
 
     it('should match empty Horizontal, next to white box', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { VIndex: 3, HIndex: 2 }, 'H');
+        const pattern = functionality.getSearchPattern(cw, { row: 3, col: 2 }, 'H');
         expect(pattern).to.equal('^\\w\\w\\w\\w$');
     });
 
     it('should match empty Vertical, next to white box', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { VIndex: 2, HIndex: 0 }, 'V');
+        const pattern = functionality.getSearchPattern(cw, { row: 2, col: 0 }, 'V');
         expect(pattern).to.equal('^\\w\\w\\w\\w$');
     });
 
     it('should match empty Horizontal, prior is black box', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { VIndex: 1, HIndex: 3 }, 'H');
+        const pattern = functionality.getSearchPattern(cw, { row: 1, col: 3 }, 'H');
         expect(pattern).to.equal('^\\w\\w$');
     });
 
     it('should match empty Vertical, prior is black box', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { VIndex: 1, HIndex: 3 }, 'V');
+        const pattern = functionality.getSearchPattern(cw, { row: 1, col: 3 }, 'V');
         expect(pattern).to.equal('^\\w\\w\\w$');
     });
 
     it('should match empty Horizontal, last white box', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { VIndex: 3, HIndex: 3 }, 'H');
+        const pattern = functionality.getSearchPattern(cw, { row: 3, col: 3 }, 'H');
         expect(pattern).to.equal('^\\w\\w\\w\\w$');
     });
 
     it('should match empty Vertical, last white box', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { VIndex: 3, HIndex: 3 }, 'V');
+        const pattern = functionality.getSearchPattern(cw, { row: 3, col: 3 }, 'V');
         expect(pattern).to.equal('^\\w\\w\\w$');
     });
 
     it('should match empty Horizontal, begining of word', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { VIndex: 2, HIndex: 2 }, 'H');
+        const pattern = functionality.getSearchPattern(cw, { row: 2, col: 2 }, 'H');
         expect(pattern).to.equal('^\\w\\w\\w$');
     });
 
     it('should match empty Vertical, begining of word', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { VIndex: 2, HIndex: 2 }, 'V');
+        const pattern = functionality.getSearchPattern(cw, { row: 2, col: 2 }, 'V');
         expect(pattern).to.equal('^\\w\\w$');
     });
 
@@ -90,47 +93,56 @@ describe('Pattern finding, with letters', () => {
     grid[ 1 ][ 2 ] = structure.BlackBox;
     grid[ 2 ][ 1 ] = structure.BlackBox;
     grid[ 3 ][ 4 ] = structure.BlackBox;
+    grid[ 0 ][ 0 ] = 'A';
+    grid[ 0 ][ 1 ] = 'L';
+    grid[ 0 ][ 2 ] = 'E';
     grid[ 2 ][ 2 ] = 'P';
     grid[ 2 ][ 3 ] = 'U';
     grid[ 3 ][ 3 ] = 'Z';
-    // [ _, _, _, #, _ ]
+    // [ A, L, E, #, _ ]
     // [ _, _, #, _, _ ]
     // [ _, #, P, U, _ ]
     // [ _, _, _, Z, # ]
 
     it('should match pattern Horizontal, begining of word', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { VIndex: 2, HIndex: 2 }, 'H');
+        const pattern = functionality.getSearchPattern(cw, { row: 1, col: 0 }, 'H');
+        expect(pattern).to.equal('^\\w\\w$');
+    });
+
+    it('should match pattern Horizontal, begining of word', () => {
+        const cw = JSON.parse(JSON.stringify(grid));
+        const pattern = functionality.getSearchPattern(cw, { row: 2, col: 2 }, 'H');
         expect(pattern).to.equal('^PU\\w$');
     });
 
     it('should match pattern Vertical, begining of word', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { VIndex: 2, HIndex: 2 }, 'V');
+        const pattern = functionality.getSearchPattern(cw, { row: 2, col: 2 }, 'V');
         expect(pattern).to.equal('^P\\w$');
     });
 
     it('should match pattern Horizontal, middle of word', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { VIndex: 2, HIndex: 3 }, 'H');
+        const pattern = functionality.getSearchPattern(cw, { row: 2, col: 3 }, 'H');
         expect(pattern).to.equal('^PU\\w$');
     });
 
     it('should match pattern Vertical, middle of word', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { VIndex: 2, HIndex: 3 }, 'V');
+        const pattern = functionality.getSearchPattern(cw, { row: 2, col: 3 }, 'V');
         expect(pattern).to.equal('^\\wUZ$');
     });
 
     it('should match pattern Horizontal, end of word', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { VIndex: 3, HIndex: 3 }, 'H');
+        const pattern = functionality.getSearchPattern(cw, { row: 3, col: 3 }, 'H');
         expect(pattern).to.equal('^\\w\\w\\wZ$');
     });
 
     it('should match pattern Vertical, end of word', () => {
         const cw = JSON.parse(JSON.stringify(grid));
-        const pattern = functionality.getSearchPattern(cw, { VIndex: 3, HIndex: 3 }, 'V');
+        const pattern = functionality.getSearchPattern(cw, { row: 3, col: 3 }, 'V');
         expect(pattern).to.equal('^\\wUZ$');
     });
 
@@ -286,17 +298,59 @@ describe('Pattern conflict', () => {
     // [ _, _, _, _, # ]
     const crossword = structure.setWordNumbers(cwInit);
 
-    it('should return false for LE', () => {
-        const hasConflict = functionality.existVerticalWithCurentHorizontal(dictionary, crossword, 2);
-        expect(hasConflict).to.be.false;
-    });
-    
     it('should return true for LE', () => {
-        const hasConflict = functionality.existVerticalWithCurentHorizontal(shortDictionary, crossword, 2);
-        expect(hasConflict).to.be.true;
+        const verticalsExist = functionality.existVerticalsWithCurentHorizontal(dictionary, crossword, 2);
+        expect(verticalsExist).to.be.true;
     });
-    
+
+    it('should return true for LE', () => {
+        const verticalsExist = functionality.existVerticalsWithCurentHorizontal(shortDictionary, crossword, 2);
+        expect(verticalsExist).to.be.false;
+    });
+
 });
+
+// describe('Filling all horizontal words', () => {
+
+//     it('should be deep equal', () => {
+//         let crosswordEmpty = structure.createEmptyCrossword(4, 5);
+//         crosswordEmpty.grid[ 0 ][ 3 ] = structure.BlackBox;
+//         crosswordEmpty.grid[ 1 ][ 2 ] = structure.BlackBox;
+//         crosswordEmpty.grid[ 2 ][ 1 ] = structure.BlackBox;
+//         crosswordEmpty.grid[ 3 ][ 4 ] = structure.BlackBox;
+//         // [ _, _, _, #, _ ]
+//         // [ _, _, #, _, _ ]
+//         // [ _, #, _, _, _ ]
+//         // [ _, _, _, _, # ]
+//         crosswordEmpty = structure.setWordNumbers(crosswordEmpty);
+//         const crosswordExpected = structure.createEmptyCrossword(4, 5);
+//         crosswordExpected.grid[ 0 ][ 0 ] = 'A';
+//         crosswordExpected.grid[ 0 ][ 1 ] = 'L';
+//         crosswordExpected.grid[ 0 ][ 2 ] = 'E';
+//         crosswordExpected.grid[ 0 ][ 3 ] = structure.BlackBox;
+//         crosswordExpected.grid[ 0 ][ 4 ] = 'M';
+//         crosswordExpected.grid[ 1 ][ 0 ] = 'D';
+//         crosswordExpected.grid[ 1 ][ 1 ] = 'A';
+//         crosswordExpected.grid[ 1 ][ 2 ] = structure.BlackBox;
+//         crosswordExpected.grid[ 1 ][ 3 ] = 'L';
+//         crosswordExpected.grid[ 1 ][ 4 ] = 'E';
+//         crosswordExpected.grid[ 2 ][ 0 ] = 'A';
+//         crosswordExpected.grid[ 2 ][ 1 ] = structure.BlackBox;
+//         crosswordExpected.grid[ 2 ][ 2 ] = 'P';
+//         crosswordExpected.grid[ 2 ][ 3 ] = 'U';
+//         crosswordExpected.grid[ 2 ][ 4 ] = 'S';
+//         crosswordExpected.grid[ 3 ][ 0 ] = 'N';
+//         crosswordExpected.grid[ 3 ][ 1 ] = 'U';
+//         crosswordExpected.grid[ 3 ][ 2 ] = 'E';
+//         crosswordExpected.grid[ 3 ][ 3 ] = 'Z';
+//         crosswordExpected.grid[ 3 ][ 4 ] = structure.BlackBox;
+
+//         const dictionary = 'ALE DA LE PUS NUEZ ADAN LA PE LUZ MES'.split(' ');
+//         const crosswordFilled = functionality.fillNextHorizontalWord(crosswordEmpty, dictionary, 0);
+//         expect(crosswordFilled).to.be.deep.equal(crosswordExpected);
+//     });
+
+// });
 
 
 // describe('Grid filling', () => {

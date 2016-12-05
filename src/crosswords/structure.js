@@ -56,7 +56,7 @@ function getWordLength(grid, row, col, direction) {
 }
 
 // Fills two collections of objects, one for horizontal and one for vertical words.
-// Objects are { cell: { HIndex, VIndex}, definitionNumber, word, definition, length }
+// Objects are { cell: { row, col}, definitionNumber, word, definition, length }
 function setWordNumbers(crossword) {
     const newCrossword = JSON.parse(JSON.stringify(crossword));
     let currentNumber = 1;
@@ -69,7 +69,7 @@ function setWordNumbers(crossword) {
                 && newCrossword.grid[ row ][ col ] !== BlackBox
                 && (col === 0 || newCrossword.grid[ row ][ col - 1 ] === BlackBox) && newCrossword.grid[ row ][ col + 1 ] !== BlackBox) { // if (first col or prior cell has black box), and not a black box follows, a new word begins on row
                 newCrossword.horizontalWords.push({
-                    cell: { HIndex: row, VIndex: col },
+                    cell: { row, col },
                     definitionNumber: currentNumber,
                     word: '',
                     definition: '',
@@ -82,7 +82,7 @@ function setWordNumbers(crossword) {
                 && newCrossword.grid[ row ][ col ] !== BlackBox
                 && (row === 0 || newCrossword.grid[ row - 1 ][ col ] === BlackBox) && newCrossword.grid[ row + 1 ][ col ] !== BlackBox) { // if (first row, or cell above has black box), and not a black box below, a new word begins on column
                 newCrossword.verticalWords.push({
-                    cell: { HIndex: row, VIndex: col },
+                    cell: { row, col },
                     definitionNumber: currentNumber,
                     word: '',
                     definition: '',
@@ -100,7 +100,14 @@ function setWordNumbers(crossword) {
     return newCrossword;
 }
 
-export { BlackBox, createEmptyCrossword, fillRandomBlackBoxes, writeCrossword, setWordNumbers, getWordLength }
+// export { BlackBox, createEmptyCrossword, fillRandomBlackBoxes, writeCrossword, setWordNumbers, getWordLength }
+module.exports.BlackBox = BlackBox;
+module.exports.createEmptyCrossword = createEmptyCrossword;
+module.exports.fillRandomBlackBoxes = fillRandomBlackBoxes;
+module.exports.writeCrossword = writeCrossword;
+module.exports.setWordNumbers = setWordNumbers;
+module.exports.setWordNumbers = setWordNumbers;
+module.exports.getWordLength = getWordLength;
 
 // // numbers words for references
 // function setWordNumbers(crossword) {

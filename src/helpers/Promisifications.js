@@ -1,10 +1,10 @@
 // from http://exploringjs.com/es6/ch_promises.html#readFilePromisified
-import { readFile } from 'fs';
+const fs = require('fs');
 
 function readFilePromisified(filename) {
     return new Promise(
         (resolve, reject) => {
-            readFile(filename, { encoding: 'utf8' },
+            fs.readFile(filename, { encoding: 'utf8' },
                 (error, data) => {
                     if (error) {
                         reject(error);
@@ -15,4 +15,5 @@ function readFilePromisified(filename) {
         });
 }
 
-export { readFilePromisified };
+// export { readFilePromisified };
+module.exports.readFilePromisified = readFilePromisified;

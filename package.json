@@ -4,16 +4,17 @@
   "description": "A crosswords puzzle generator",
   "main": "crosswords.js",
   "scripts": {
-    "cross": "babel-node ./src/crosswords/index.js",
+    "myTests": "node ./src/helpers/myTests.js",
+    "cross": "node ./src/crosswords/index.js",
     "prerunallstart": "npm-run-all --parallel start-message remove-dist",
     "runallstart": "npm-run-all --parallel test:watch open:src lint:watch",
     "start": "node server.js",
-    "open:src": "babel-node tools/srcServer.js",
-    "open:dist": "babel-node tools/distServer.js",
+    "open:src": "node tools/srcServer.js",
+    "open:dist": "node tools/distServer.js",
     "clean-dist": "npm run remove-dist && mkdir dist",
     "remove-dist": "rimraf ./dist",
     "prebuild": "npm run clean-dist",
-    "build": "babel-node tools/build.js",
+    "build": "node tools/build.js",
     "test-full": "mocha tools/testSetup.js \"src/**/*.spec.js\"",
     "test": "mocha tools/testSetup.js \"src/**/*.spec.js\" --reporter progress",
     "test:watch": "npm run test -- --watch"
@@ -28,10 +29,6 @@
     "word-list": "^1.0.1"
   },
   "devDependencies": {
-    "babel-cli": "^6.14.0",
-    "babel-core": "^6.14.0",
-    "babel-preset-node6": "^11.0.0",
-    "babel-preset-react": "6.11.1",
     "chai": "3.5.0",
     "chalk": "1.1.3",
     "connect-history-api-fallback": "1.3.0",

@@ -1,8 +1,8 @@
-import wordListPath from 'word-list';
+const wordListPath = require('word-list');
 
-import * as promisifications from '../helpers/Promisifications';
-import * as structure from './structure';
-import * as functionality from './functionality';
+const promisifications = require('../helpers/Promisifications');
+const structure = require('./structure');
+const functionality = require('./functionality');
 
 const startUsage = process.cpuUsage();
 
@@ -12,7 +12,7 @@ crossword = structure.setWordNumbers(crossword);
 
 promisifications.readFilePromisified(wordListPath)
     .then(wordList => {
-        crossword = functionality.getFilledCrossword(crossword, wordList.split('\n'));
+        crossword = functionality.fillNextHorizontalWord(crossword, wordList.split('\n'));
         structure.writeCrossword(crossword);
         console.log('usage2: ', process.cpuUsage(startUsage));
     })

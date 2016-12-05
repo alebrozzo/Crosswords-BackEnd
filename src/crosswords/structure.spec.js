@@ -1,8 +1,10 @@
 /* eslint no-magic-numbers: "off" */
 /* eslint no-unused-expressions: "off" */
 
-import { expect } from 'chai';
-import * as structure from './structure';
+const chai = require('chai');
+const expect = chai.expect;
+
+const structure = require('./structure');
 
 describe('Empty crossword creation', () => {
     const rowCount = 4;
@@ -110,16 +112,16 @@ describe('Set numbers for word references', () => {
         const actualHorizontal = cw.horizontalWords;
         const actualVertical = cw.verticalWords;
         const expectedHorizontal = [
-            { cell: { HIndex: 0, VIndex: 0 }, definitionNumber: 1, word: '', definition: '', length: 5 },
-            { cell: { HIndex: 1, VIndex: 0 }, definitionNumber: 6, word: '', definition: '', length: 5 },
-            { cell: { HIndex: 2, VIndex: 0 }, definitionNumber: 7, word: '', definition: '', length: 5 },
-            { cell: { HIndex: 3, VIndex: 0 }, definitionNumber: 8, word: '', definition: '', length: 5 }];
+            { cell: { row: 0, col: 0 }, definitionNumber: 1, word: '', definition: '', length: 5 },
+            { cell: { row: 1, col: 0 }, definitionNumber: 6, word: '', definition: '', length: 5 },
+            { cell: { row: 2, col: 0 }, definitionNumber: 7, word: '', definition: '', length: 5 },
+            { cell: { row: 3, col: 0 }, definitionNumber: 8, word: '', definition: '', length: 5 }];
         const expectedVertical = [
-            { cell: { HIndex: 0, VIndex: 0 }, definitionNumber: 1, word: '', definition: '', length: 4 },
-            { cell: { HIndex: 0, VIndex: 1 }, definitionNumber: 2, word: '', definition: '', length: 4 },
-            { cell: { HIndex: 0, VIndex: 2 }, definitionNumber: 3, word: '', definition: '', length: 4 },
-            { cell: { HIndex: 0, VIndex: 3 }, definitionNumber: 4, word: '', definition: '', length: 4 },
-            { cell: { HIndex: 0, VIndex: 4 }, definitionNumber: 5, word: '', definition: '', length: 4 }];
+            { cell: { row: 0, col: 0 }, definitionNumber: 1, word: '', definition: '', length: 4 },
+            { cell: { row: 0, col: 1 }, definitionNumber: 2, word: '', definition: '', length: 4 },
+            { cell: { row: 0, col: 2 }, definitionNumber: 3, word: '', definition: '', length: 4 },
+            { cell: { row: 0, col: 3 }, definitionNumber: 4, word: '', definition: '', length: 4 },
+            { cell: { row: 0, col: 4 }, definitionNumber: 5, word: '', definition: '', length: 4 }];
         expect(actualHorizontal, 'empty crossword horizontal').to.deep.equal(expectedHorizontal);
         expect(actualVertical, 'empty crossword vertical').to.deep.equal(expectedVertical);
     });
@@ -139,15 +141,15 @@ describe('Set numbers for word references', () => {
         const actualHorizontal = cw.horizontalWords;
         const actualVertical = cw.verticalWords;
         const expectedHorizontal = [
-            { cell: { HIndex: 0, VIndex: 2 }, definitionNumber: 1, word: '', definition: '', length: 3 },
-            { cell: { HIndex: 1, VIndex: 3 }, definitionNumber: 4, word: '', definition: '', length: 2 },
-            { cell: { HIndex: 2, VIndex: 2 }, definitionNumber: 6, word: '', definition: '', length: 3 },
-            { cell: { HIndex: 3, VIndex: 0 }, definitionNumber: 7, word: '', definition: '', length: 5 }];
+            { cell: { row: 0, col: 2 }, definitionNumber: 1, word: '', definition: '', length: 3 },
+            { cell: { row: 1, col: 3 }, definitionNumber: 4, word: '', definition: '', length: 2 },
+            { cell: { row: 2, col: 2 }, definitionNumber: 6, word: '', definition: '', length: 3 },
+            { cell: { row: 3, col: 0 }, definitionNumber: 7, word: '', definition: '', length: 5 }];
         const expectedVertical = [
-            { cell: { HIndex: 0, VIndex: 3 }, definitionNumber: 2, word: '', definition: '', length: 4 },
-            { cell: { HIndex: 0, VIndex: 4 }, definitionNumber: 3, word: '', definition: '', length: 4 },
-            { cell: { HIndex: 2, VIndex: 0 }, definitionNumber: 5, word: '', definition: '', length: 2 },
-            { cell: { HIndex: 2, VIndex: 2 }, definitionNumber: 6, word: '', definition: '', length: 2 }];
+            { cell: { row: 0, col: 3 }, definitionNumber: 2, word: '', definition: '', length: 4 },
+            { cell: { row: 0, col: 4 }, definitionNumber: 3, word: '', definition: '', length: 4 },
+            { cell: { row: 2, col: 0 }, definitionNumber: 5, word: '', definition: '', length: 2 },
+            { cell: { row: 2, col: 2 }, definitionNumber: 6, word: '', definition: '', length: 2 }];
         expect(actualHorizontal, 'crossword horizontal').to.deep.equal(expectedHorizontal);
         expect(actualVertical, 'crossword vertical').to.deep.equal(expectedVertical);
     });
@@ -167,17 +169,17 @@ describe('Set numbers for word references', () => {
         const actualHorizontal = cw.horizontalWords;
         const actualVertical = cw.verticalWords;
         const expectedHorizontal = [
-            { cell: { HIndex: 0, VIndex: 0 }, definitionNumber: 1, word: '', definition: '', length: 3 },
-            { cell: { HIndex: 1, VIndex: 0 }, definitionNumber: 4, word: '', definition: '', length: 2 },
-            { cell: { HIndex: 1, VIndex: 3 }, definitionNumber: 5, word: '', definition: '', length: 2 },
-            { cell: { HIndex: 2, VIndex: 2 }, definitionNumber: 6, word: '', definition: '', length: 3 },
-            { cell: { HIndex: 3, VIndex: 0 }, definitionNumber: 7, word: '', definition: '', length: 4 }];
+            { cell: { row: 0, col: 0 }, definitionNumber: 1, word: '', definition: '', length: 3 },
+            { cell: { row: 1, col: 0 }, definitionNumber: 4, word: '', definition: '', length: 2 },
+            { cell: { row: 1, col: 3 }, definitionNumber: 5, word: '', definition: '', length: 2 },
+            { cell: { row: 2, col: 2 }, definitionNumber: 6, word: '', definition: '', length: 3 },
+            { cell: { row: 3, col: 0 }, definitionNumber: 7, word: '', definition: '', length: 4 }];
         const expectedVertical = [
-            { cell: { HIndex: 0, VIndex: 0 }, definitionNumber: 1, word: '', definition: '', length: 4 },
-            { cell: { HIndex: 0, VIndex: 1 }, definitionNumber: 2, word: '', definition: '', length: 2 },
-            { cell: { HIndex: 0, VIndex: 4 }, definitionNumber: 3, word: '', definition: '', length: 3 },
-            { cell: { HIndex: 1, VIndex: 3 }, definitionNumber: 5, word: '', definition: '', length: 3 },
-            { cell: { HIndex: 2, VIndex: 2 }, definitionNumber: 6, word: '', definition: '', length: 2 }];
+            { cell: { row: 0, col: 0 }, definitionNumber: 1, word: '', definition: '', length: 4 },
+            { cell: { row: 0, col: 1 }, definitionNumber: 2, word: '', definition: '', length: 2 },
+            { cell: { row: 0, col: 4 }, definitionNumber: 3, word: '', definition: '', length: 3 },
+            { cell: { row: 1, col: 3 }, definitionNumber: 5, word: '', definition: '', length: 3 },
+            { cell: { row: 2, col: 2 }, definitionNumber: 6, word: '', definition: '', length: 2 }];
         expect(actualHorizontal, 'crossword horizontal').to.deep.equal(expectedHorizontal);
         expect(actualVertical, 'crossword vertical').to.deep.equal(expectedVertical);
     });
