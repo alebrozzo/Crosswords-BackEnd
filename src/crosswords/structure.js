@@ -28,8 +28,9 @@ function fillRandomBlackBoxes(grid, blackBoxCount) {
 
 // writes the crossword using the function passed (console.log if missing)
 function writeCrossword(crossword, writer = console.log) {
-    for (let row = 0; row < crossword.length; row++) {
-        writer(crossword[ row ]);
+    writer('grid:\n');
+    for (let row = 0; row < crossword.grid.length; row++) {
+        writer(crossword.grid[ row ]);
     }
     writer('Horizontals:', crossword.horizontalWords);
     writer('Verticals:', crossword.verticalWords);

@@ -7,19 +7,22 @@ const chai = require('chai');
 const expect = chai.expect;
 
 const fs = require('fs');
+const path = require('path');
+
+// const arrays = require('../helpers/arrays');
 
 const exceptions = require('../helpers/exceptions');
 const Exception = exceptions.Exception;
 const structure = require('./structure');
 const functionality = require('./functionality');
-const wordListPath = require('word-list');
+// const wordListPath = require('word-list');
 
 describe('Pattern finding, empty', () => {
     const grid = structure.createEmptyCrossword(4, 5).grid;
-    grid[ 0 ][ 3 ] = structure.BlackBox;
-    grid[ 1 ][ 2 ] = structure.BlackBox;
-    grid[ 2 ][ 1 ] = structure.BlackBox;
-    grid[ 3 ][ 4 ] = structure.BlackBox;
+    grid[0][3] = structure.BlackBox;
+    grid[1][2] = structure.BlackBox;
+    grid[2][1] = structure.BlackBox;
+    grid[3][4] = structure.BlackBox;
     // [ _, _, _, #, _ ]
     // [ _, _, #, _, _ ]
     // [ _, #, _, _, _ ]
@@ -89,16 +92,16 @@ describe('Pattern finding, empty', () => {
 
 describe('Pattern finding, with letters', () => {
     const grid = structure.createEmptyCrossword(4, 5).grid;
-    grid[ 0 ][ 3 ] = structure.BlackBox;
-    grid[ 1 ][ 2 ] = structure.BlackBox;
-    grid[ 2 ][ 1 ] = structure.BlackBox;
-    grid[ 3 ][ 4 ] = structure.BlackBox;
-    grid[ 0 ][ 0 ] = 'A';
-    grid[ 0 ][ 1 ] = 'L';
-    grid[ 0 ][ 2 ] = 'E';
-    grid[ 2 ][ 2 ] = 'P';
-    grid[ 2 ][ 3 ] = 'U';
-    grid[ 3 ][ 3 ] = 'Z';
+    grid[0][3] = structure.BlackBox;
+    grid[1][2] = structure.BlackBox;
+    grid[2][1] = structure.BlackBox;
+    grid[3][4] = structure.BlackBox;
+    grid[0][0] = 'A';
+    grid[0][1] = 'L';
+    grid[0][2] = 'E';
+    grid[2][2] = 'P';
+    grid[2][3] = 'U';
+    grid[3][3] = 'Z';
     // [ A, L, E, #, _ ]
     // [ _, _, #, _, _ ]
     // [ _, #, P, U, _ ]
@@ -149,17 +152,18 @@ describe('Pattern finding, with letters', () => {
 });
 
 describe('Word search on word list', () => {
-    const wordList = fs.readFileSync(wordListPath, 'utf8');
+    const wordList = fs.readFileSync(path.resolve(__dirname, 'wordList.js'), 'utf8');
     it('should load the file contents', () => {
         expect(wordList).to.not.be.null;
     });
 
-    const wordArray = wordList.split('\n');
+    /*
+    const wordArray = wordList.split('\r\n');
     it('should return the file contents', () => {
-        expect(wordArray[ 0 ]).to.equal('aa');
-        expect(wordArray[ 3 ]).to.equal('aahing');
-        expect(wordArray[ wordArray.length - 2 ]).to.equal('zzz');
-        expect(wordArray[ wordArray.length - 1 ]).to.equal('zzzs');
+        expect(wordArray[0]).to.equal('aa');
+        expect(wordArray[3]).to.equal('aahing');
+        expect(wordArray[wordArray.length - 2]).to.equal('zzz');
+        expect(wordArray[wordArray.length - 1]).to.equal('zzzs');
     });
 
     it('should find a three letter word', () => {
@@ -206,18 +210,19 @@ describe('Word search on word list', () => {
         const actual = functionality.findWord(wordArray, '^\\w\\wñ$');
         expect(actual).to.be.null;
     });
+    */
 
 });
 
 describe('Word writing', () => {
     const cwInit = structure.createEmptyCrossword(4, 5);
-    cwInit.grid[ 0 ][ 3 ] = structure.BlackBox;
-    cwInit.grid[ 1 ][ 2 ] = structure.BlackBox;
-    cwInit.grid[ 2 ][ 1 ] = structure.BlackBox;
-    cwInit.grid[ 3 ][ 4 ] = structure.BlackBox;
-    cwInit.grid[ 2 ][ 2 ] = 'P';
-    cwInit.grid[ 2 ][ 3 ] = 'U';
-    cwInit.grid[ 3 ][ 3 ] = 'Z';
+    cwInit.grid[0][3] = structure.BlackBox;
+    cwInit.grid[1][2] = structure.BlackBox;
+    cwInit.grid[2][1] = structure.BlackBox;
+    cwInit.grid[3][4] = structure.BlackBox;
+    cwInit.grid[2][2] = 'P';
+    cwInit.grid[2][3] = 'U';
+    cwInit.grid[3][3] = 'Z';
     // [ _, _, _, #, _ ]
     // [ _, _, #, _, _ ]
     // [ _, #, P, U, _ ]
@@ -226,42 +231,42 @@ describe('Word writing', () => {
 
     it('should write the word ALE properly (H)', () => {
         const cw = functionality.writeWord(crossword, 'H', 0, 'ALE');
-        expect(cw.horizontalWords[ 0 ].word).to.equal('ALE');
-        expect(cw.grid[ 0 ][ 0 ]).to.equal('A');
-        expect(cw.grid[ 0 ][ 1 ]).to.equal('L');
-        expect(cw.grid[ 0 ][ 2 ]).to.equal('E');
+        expect(cw.horizontalWords[0].word).to.equal('ALE');
+        expect(cw.grid[0][0]).to.equal('A');
+        expect(cw.grid[0][1]).to.equal('L');
+        expect(cw.grid[0][2]).to.equal('E');
     });
 
     it('should write the word PUS properly (H)', () => {
         const cw = functionality.writeWord(crossword, 'H', 3, 'PUS');
-        expect(cw.horizontalWords[ 3 ].word).to.equal('PUS');
-        expect(cw.grid[ 2 ][ 2 ]).to.equal('P');
-        expect(cw.grid[ 2 ][ 3 ]).to.equal('U');
-        expect(cw.grid[ 2 ][ 4 ]).to.equal('S');
+        expect(cw.horizontalWords[3].word).to.equal('PUS');
+        expect(cw.grid[2][2]).to.equal('P');
+        expect(cw.grid[2][3]).to.equal('U');
+        expect(cw.grid[2][4]).to.equal('S');
     });
 
     it('should write the word NUEZ properly (H)', () => {
         const cw = functionality.writeWord(crossword, 'H', 4, 'NUEZ');
-        expect(cw.horizontalWords[ 4 ].word).to.equal('NUEZ');
-        expect(cw.grid[ 3 ][ 0 ]).to.equal('N');
-        expect(cw.grid[ 3 ][ 1 ]).to.equal('U');
-        expect(cw.grid[ 3 ][ 2 ]).to.equal('E');
-        expect(cw.grid[ 3 ][ 3 ]).to.equal('Z');
+        expect(cw.horizontalWords[4].word).to.equal('NUEZ');
+        expect(cw.grid[3][0]).to.equal('N');
+        expect(cw.grid[3][1]).to.equal('U');
+        expect(cw.grid[3][2]).to.equal('E');
+        expect(cw.grid[3][3]).to.equal('Z');
     });
 
     it('should write the word LUZ properly (V)', () => {
         const cw = functionality.writeWord(crossword, 'V', 3, 'LUZ');
-        expect(cw.verticalWords[ 3 ].word).to.equal('LUZ');
-        expect(cw.grid[ 1 ][ 3 ]).to.equal('L');
-        expect(cw.grid[ 2 ][ 3 ]).to.equal('U');
-        expect(cw.grid[ 3 ][ 3 ]).to.equal('Z');
+        expect(cw.verticalWords[3].word).to.equal('LUZ');
+        expect(cw.grid[1][3]).to.equal('L');
+        expect(cw.grid[2][3]).to.equal('U');
+        expect(cw.grid[3][3]).to.equal('Z');
     });
 
     it('should write the word PE properly (V)', () => {
         const cw = functionality.writeWord(crossword, 'V', 4, 'PE');
-        expect(cw.verticalWords[ 4 ].word).to.equal('PE');
-        expect(cw.grid[ 2 ][ 2 ]).to.equal('P');
-        expect(cw.grid[ 3 ][ 2 ]).to.equal('E');
+        expect(cw.verticalWords[4].word).to.equal('PE');
+        expect(cw.grid[2][2]).to.equal('P');
+        expect(cw.grid[3][2]).to.equal('E');
     });
 
     it('should throw an exception (length not match) (H)', () => {
@@ -284,14 +289,14 @@ describe('Word writing', () => {
 
 describe('Pattern conflict', () => {
     const dictionary = 'ALE DA LE PUS NUEZ ADAN LA PE LUZ MES'.split(' ');
-    const shortDictionary = 'XXX'.split(' ');
+    const shortDictionary = 'XXXXXXXXXXXXXXXXXX'.split(' ');
     const cwInit = structure.createEmptyCrossword(4, 5);
-    cwInit.grid[ 0 ][ 3 ] = structure.BlackBox;
-    cwInit.grid[ 1 ][ 2 ] = structure.BlackBox;
-    cwInit.grid[ 2 ][ 1 ] = structure.BlackBox;
-    cwInit.grid[ 3 ][ 4 ] = structure.BlackBox;
-    cwInit.grid[ 1 ][ 3 ] = 'L';
-    cwInit.grid[ 1 ][ 4 ] = 'E';
+    cwInit.grid[0][3] = structure.BlackBox;
+    cwInit.grid[1][2] = structure.BlackBox;
+    cwInit.grid[2][1] = structure.BlackBox;
+    cwInit.grid[3][4] = structure.BlackBox;
+    cwInit.grid[1][3] = 'L';
+    cwInit.grid[1][4] = 'E';
     // [ _, _, _, #, _ ]
     // [ _, _, #, L, E ]
     // [ _, #, P, _, _ ]
@@ -303,88 +308,135 @@ describe('Pattern conflict', () => {
         expect(verticalsExist).to.be.true;
     });
 
-    it('should return true for LE', () => {
+    it('should return false for LE', () => {
         const verticalsExist = functionality.existVerticalsWithCurentHorizontal(shortDictionary, crossword, 2);
         expect(verticalsExist).to.be.false;
     });
 
 });
 
-// describe('Filling all horizontal words', () => {
+describe('Filling all horizontal words', () => {
 
-//     it('should be deep equal', () => {
-//         let crosswordEmpty = structure.createEmptyCrossword(4, 5);
-//         crosswordEmpty.grid[ 0 ][ 3 ] = structure.BlackBox;
-//         crosswordEmpty.grid[ 1 ][ 2 ] = structure.BlackBox;
-//         crosswordEmpty.grid[ 2 ][ 1 ] = structure.BlackBox;
-//         crosswordEmpty.grid[ 3 ][ 4 ] = structure.BlackBox;
-//         // [ _, _, _, #, _ ]
-//         // [ _, _, #, _, _ ]
-//         // [ _, #, _, _, _ ]
-//         // [ _, _, _, _, # ]
-//         crosswordEmpty = structure.setWordNumbers(crosswordEmpty);
-//         const crosswordExpected = structure.createEmptyCrossword(4, 5);
-//         crosswordExpected.grid[ 0 ][ 0 ] = 'A';
-//         crosswordExpected.grid[ 0 ][ 1 ] = 'L';
-//         crosswordExpected.grid[ 0 ][ 2 ] = 'E';
-//         crosswordExpected.grid[ 0 ][ 3 ] = structure.BlackBox;
-//         crosswordExpected.grid[ 0 ][ 4 ] = 'M';
-//         crosswordExpected.grid[ 1 ][ 0 ] = 'D';
-//         crosswordExpected.grid[ 1 ][ 1 ] = 'A';
-//         crosswordExpected.grid[ 1 ][ 2 ] = structure.BlackBox;
-//         crosswordExpected.grid[ 1 ][ 3 ] = 'L';
-//         crosswordExpected.grid[ 1 ][ 4 ] = 'E';
-//         crosswordExpected.grid[ 2 ][ 0 ] = 'A';
-//         crosswordExpected.grid[ 2 ][ 1 ] = structure.BlackBox;
-//         crosswordExpected.grid[ 2 ][ 2 ] = 'P';
-//         crosswordExpected.grid[ 2 ][ 3 ] = 'U';
-//         crosswordExpected.grid[ 2 ][ 4 ] = 'S';
-//         crosswordExpected.grid[ 3 ][ 0 ] = 'N';
-//         crosswordExpected.grid[ 3 ][ 1 ] = 'U';
-//         crosswordExpected.grid[ 3 ][ 2 ] = 'E';
-//         crosswordExpected.grid[ 3 ][ 3 ] = 'Z';
-//         crosswordExpected.grid[ 3 ][ 4 ] = structure.BlackBox;
+    let crosswordEmpty = structure.createEmptyCrossword(4, 5);
+    crosswordEmpty.grid[0][3] = structure.BlackBox;
+    crosswordEmpty.grid[1][2] = structure.BlackBox;
+    crosswordEmpty.grid[2][1] = structure.BlackBox;
+    crosswordEmpty.grid[3][4] = structure.BlackBox;
+    // [ _, _, _, #, _ ]
+    // [ _, _, #, _, _ ]
+    // [ _, #, _, _, _ ]
+    // [ _, _, _, _, # ]
+    crosswordEmpty = structure.setWordNumbers(crosswordEmpty);
 
-//         const dictionary = 'ALE DA LE PUS NUEZ ADAN LA PE LUZ MES'.split(' ');
-//         const crosswordFilled = functionality.fillNextHorizontalWord(crosswordEmpty, dictionary, 0);
-//         expect(crosswordFilled).to.be.deep.equal(crosswordExpected);
-//     });
+    it('should return null', () => {
+        const dictionary = 'XXX'.split(' ');
+        const crosswordFilled = functionality.fillNextHorizontalWord(crosswordEmpty, dictionary, 0);
+        expect(crosswordFilled).to.be.null;
+    });
 
-// });
+});
 
+describe('Filling all horizontal words', () => {
 
-// describe('Grid filling', () => {
-//     const crossword = structure.createEmptyCrossword(4, 5);
-//     crossword.grid[ 0 ][ 3 ] = structure.BlackBox;
-//     crossword.grid[ 1 ][ 2 ] = structure.BlackBox;
-//     crossword.grid[ 2 ][ 1 ] = structure.BlackBox;
-//     crossword.grid[ 3 ][ 4 ] = structure.BlackBox;
+    let crosswordEmpty = structure.createEmptyCrossword(4, 5);
+    crosswordEmpty.grid[0][3] = structure.BlackBox;
+    crosswordEmpty.grid[1][2] = structure.BlackBox;
+    crosswordEmpty.grid[2][1] = structure.BlackBox;
+    crosswordEmpty.grid[3][4] = structure.BlackBox;
+    // [ _, _, _, #, _ ]
+    // [ _, _, #, _, _ ]
+    // [ _, #, _, _, _ ]
+    // [ _, _, _, _, # ]
+    crosswordEmpty = structure.setWordNumbers(crosswordEmpty);
+    let crosswordExpected = structure.createEmptyCrossword(4, 5);
+    crosswordExpected.grid[0][0] = 'A';
+    crosswordExpected.grid[0][1] = 'L';
+    crosswordExpected.grid[0][2] = 'E';
+    crosswordExpected.grid[0][3] = structure.BlackBox;
+    // crosswordExpected.grid[ 0 ][ 4 ] = 'M';
 
-//     const dictionary = 'ALE DA LE PUS NUEZ ADAN LA PE LUZ MES'.split(' ');
+    crosswordExpected.grid[1][0] = 'D';
+    crosswordExpected.grid[1][1] = 'A';
+    crosswordExpected.grid[1][2] = structure.BlackBox;
+    crosswordExpected.grid[1][3] = 'L';
+    crosswordExpected.grid[1][4] = 'E';
 
-//     // create a copy based on the original
-//     let filledCrossword = JSON.parse(JSON.stringify(crossword));
-//     // fill the original as the app should fill the expected with the given dictionary
-//     crossword.grid[ 0 ][ 0 ] = 'A';
-//     crossword.grid[ 0 ][ 1 ] = 'L';
-//     crossword.grid[ 0 ][ 2 ] = 'E';
-//     crossword.grid[ 0 ][ 4 ] = 'M';
-//     crossword.grid[ 1 ][ 0 ] = 'D';
-//     crossword.grid[ 1 ][ 1 ] = 'A';
-//     crossword.grid[ 1 ][ 3 ] = 'L';
-//     crossword.grid[ 1 ][ 4 ] = 'E';
-//     crossword.grid[ 2 ][ 0 ] = 'A';
-//     crossword.grid[ 2 ][ 2 ] = 'P';
-//     crossword.grid[ 2 ][ 3 ] = 'U';
-//     crossword.grid[ 2 ][ 4 ] = 'S';
-//     crossword.grid[ 3 ][ 0 ] = 'N';
-//     crossword.grid[ 3 ][ 1 ] = 'U';
-//     crossword.grid[ 3 ][ 2 ] = 'E';
-//     crossword.grid[ 3 ][ 3 ] = 'Z';
+    // crosswordExpected.grid[ 2 ][ 0 ] = 'A';
+    crosswordExpected.grid[2][1] = structure.BlackBox;
+    crosswordExpected.grid[2][2] = 'P';
+    crosswordExpected.grid[2][3] = 'U';
+    crosswordExpected.grid[2][4] = 'S';
 
-//     it('should match provided outcome', () => {
-//         filledCrossword = functionality.getFilledCrossword(filledCrossword, dictionary);
-//         expect(filledCrossword).to.deep.equal(crossword);
-//     });
+    crosswordExpected.grid[3][0] = 'N';
+    crosswordExpected.grid[3][1] = 'U';
+    crosswordExpected.grid[3][2] = 'E';
+    crosswordExpected.grid[3][3] = 'Z';
+    crosswordExpected.grid[3][4] = structure.BlackBox;
 
-// });
+    crosswordExpected = structure.setWordNumbers(crosswordExpected);
+    crosswordExpected.horizontalWords[0].word = 'ALE';
+    crosswordExpected.horizontalWords[1].word = 'DA';
+    crosswordExpected.horizontalWords[2].word = 'LE';
+    crosswordExpected.horizontalWords[3].word = 'PUS';
+    crosswordExpected.horizontalWords[4].word = 'NUEZ';
+
+    it('should be deep equal', () => {
+        const dictionary = 'ALE DA LE PUS NUEZ ADAN LA PE LUZ MES'.split(' ');
+        const crosswordFilled = functionality.fillNextHorizontalWord(crosswordEmpty, dictionary, 0);
+        expect(crosswordFilled).to.be.deep.equal(crosswordExpected);
+
+        const dictionaryReordered = 'LE PUS NUEZ ADAN LA PE LUZ MES DA ALE'.split(' ');
+        const crosswordFilledWithReorderedDictionary = functionality.fillNextHorizontalWord(crosswordEmpty, dictionaryReordered, 0);
+        expect(crosswordFilledWithReorderedDictionary.grid).to.be.deep.equal(crosswordExpected.grid);
+    });
+
+});
+
+describe('Filling all vertical words', () => {
+
+    let crosswordOriginal = structure.createEmptyCrossword(4, 5);
+    crosswordOriginal.grid[0][0] = 'A';
+    crosswordOriginal.grid[0][1] = 'L';
+    crosswordOriginal.grid[0][2] = 'E';
+    crosswordOriginal.grid[0][3] = structure.BlackBox;
+    crosswordOriginal.grid[0][4] = 'M';
+
+    crosswordOriginal.grid[1][0] = 'D';
+    crosswordOriginal.grid[1][1] = 'A';
+    crosswordOriginal.grid[1][2] = structure.BlackBox;
+    crosswordOriginal.grid[1][3] = 'L';
+    crosswordOriginal.grid[1][4] = 'E';
+
+    crosswordOriginal.grid[2][0] = 'A';
+    crosswordOriginal.grid[2][1] = structure.BlackBox;
+    crosswordOriginal.grid[2][2] = 'P';
+    crosswordOriginal.grid[2][3] = 'U';
+    crosswordOriginal.grid[2][4] = 'S';
+
+    crosswordOriginal.grid[3][0] = 'N';
+    crosswordOriginal.grid[3][1] = 'U';
+    crosswordOriginal.grid[3][2] = 'E';
+    crosswordOriginal.grid[3][3] = 'Z';
+    crosswordOriginal.grid[3][4] = structure.BlackBox;
+
+    crosswordOriginal = structure.setWordNumbers(crosswordOriginal);
+    crosswordOriginal.horizontalWords[0].word = 'ALE';
+    crosswordOriginal.horizontalWords[1].word = 'DA';
+    crosswordOriginal.horizontalWords[2].word = 'LE';
+    crosswordOriginal.horizontalWords[3].word = 'PUS';
+    crosswordOriginal.horizontalWords[4].word = 'NUEZ';
+
+    const crosswordExpected = JSON.parse(JSON.stringify(crosswordOriginal));
+    crosswordExpected.verticalWords[0].word = 'ADAN';
+    crosswordExpected.verticalWords[1].word = 'LA';
+    crosswordExpected.verticalWords[2].word = 'MES';
+    crosswordExpected.verticalWords[3].word = 'LUZ';
+    crosswordExpected.verticalWords[4].word = 'PE';
+
+    it('should be deep equal', () => {
+        const dictionary = 'ALE DA LE PUS NUEZ ADAN LA PE LUZ MES'.split(' ');
+        const crosswordFilled = functionality.fillVerticalWords(crosswordOriginal, dictionary);
+        expect(crosswordFilled).to.be.deep.equal(crosswordExpected);
+    });
+
+});
