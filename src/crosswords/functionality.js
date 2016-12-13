@@ -43,10 +43,11 @@ function getSearchPattern(grid, cell, direction) {
 }
 
 // finds words matching a specific pattern and retrieves the one in the "skipWords" position (defaults to 0)
-function findWord(dictionary, pattern, skipWords = 0) {
+function findWord(dictionary, pattern, wordsToAvoid = [], skipWords = 0) {
+    const doNotInclude = wordsToAvoid;
     const rePattern = new RegExp(pattern);
     // let possibleWords = dictionary.filter(word => word.length === length && word.startsWith(startsWith));
-    const possibleWords = dictionary.filter(word => rePattern.exec(word)); // TODO: this goes through the whole dictionary. Better to use a while.
+    const possibleWords = dictionary.filter(word => rePattern.exec(word) && doNotInclude.indexOf(word) < 0); // TODO: this goes through the whole dictionary. Better to use a while.
     let returnValue = null;
     if (possibleWords && skipWords < possibleWords.length) {
         returnValue = possibleWords[ skipWords ];
@@ -86,14 +87,28 @@ function writeWord(crossword, direction, index, word) {
     return newCrossword;
 }
 
+// returns all words written to the crossword in a single array, searching by horizontal words first and vertical then.
+function getUsedWords(crossword) {
+    const usedWords = [];
+    for (let j = 0; j < 2; j++) {
+        const dic = j === 0 ? crossword.horizontalWords : crossword.verticalWords;
+        for (let i = 0; i < dic.length; i++) {
+            if (dic[ i ].word !== '')
+                usedWords.push(dic[ i ].word);
+        }
+    }
+    return usedWords;
+}
+
 // Verify if by adding the specified horizontal word we can find vertical words that will fit.
 function existVerticalsWithCurentHorizontal(dictionary, currentCrossword, index) {
     const currentWord = currentCrossword.horizontalWords[ index ];
     let hasConflict = false;
     let searchPattern = null;
+    const currentWords = getUsedWords(currentCrossword);
     for (let i = 0; i < currentWord.length; i++) {
         searchPattern = getSearchPattern(currentCrossword.grid, { row: currentWord.cell.row, col: currentWord.cell.col + i }, 'V');
-        if (searchPattern !== '^\\w$' && !(/^\^\w\$$/).test(searchPattern) /* single letter pattern is ignored */ && findWord(dictionary, searchPattern) === null) {
+        if (searchPattern !== '^\\w$' && !(/^\^\w\$$/).test(searchPattern) /* single letter pattern is ignored */ && findWord(dictionary, searchPattern, currentWords) === null) {
             hasConflict = true;
             break;
         }
@@ -114,7 +129,7 @@ function fillNextHorizontalWord(crossword, dictionary, index) {
     let wordsSkipped = 0;
     const searchPattern = getSearchPattern(crossword.grid, crossword.horizontalWords[ index ].cell, 'H');
     do {
-        potentialWord = findWord(dictionary, searchPattern, wordsSkipped);
+        potentialWord = findWord(dictionary, searchPattern, getUsedWords(crossword), wordsSkipped);
         // TODO: remove potential word from the dictionary
         if (potentialWord !== null) {
             potentialNextCrossword = writeWord(crossword, 'H', index, potentialWord);
@@ -168,6 +183,7 @@ function fillCrossword(crossword, dictionary) {
 module.exports.findWord = findWord;
 module.exports.writeWord = writeWord;
 module.exports.getSearchPattern = getSearchPattern;
+module.exports.getUsedWords = getUsedWords;
 module.exports.existVerticalsWithCurentHorizontal = existVerticalsWithCurentHorizontal;
 module.exports.fillNextHorizontalWord = fillNextHorizontalWord;
 module.exports.fillVerticalWords = fillVerticalWords;
