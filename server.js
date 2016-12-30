@@ -1,29 +1,71 @@
-/*
-import http from 'http';
-// var serveStaticFiles = require('ecstatic')({ root: __dirname + '/static' });
-const port = process.env.PORT || 8000;
-
-http.createServer((req, res) => {
-    
-    // default: handle the request as a static file
-    // serveStaticFiles(req, res);
-
-    return;
-
-}).listen(port);
-*/
 const express = require('express');
-// import express from 'express';
 const app = express();
+const bodyParser = require('body-parser');
+
+// apps
+const crossword = require('./src/crosswords/execution');
+
 
 app.set('port', process.env.PORT || 5000);
 app.use(express.static(`${__dirname}/dist`));
 
+// configure app to use bodyParser()
+// this will let us get the data from a POST
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 // views is directory for all template files
 // app.set('views', `${__dirname}/views`);
 // app.set('view engine', 'ejs');
-
+/*
 app.get('/dist', (request, response) => response.render(`${__dirname}dist/index`));
 app.get('/', (request, response) => response.render(`${__dirname}src/index`));
+*/
+
+// ROUTES FOR OUR API
+// =============================================================================
+// get an instance of the express Router
+var router = express.Router();
+// middleware to use for all requests
+router.use(function (req, res, next) {
+    // do logging
+    console.log('Something is happening:', req);
+    // validations, authorization checks, or conditional serving could also go here
+
+    // make sure we go to the next routes and don't stop here
+    next();
+});
+
+// test route to make sure everything is working (accessed at GET http://localhost:5000/api)
+router.get('/', function (req, res) {
+    res.json({ message: 'hooray! welcome to our api!' });
+});
+
+// more routes for our API will happen here
+//   on routes that end in /bears
+//   ----------------------------------------------------
+router.route('/full')
+    // define the get verb
+    .get(function (req, res) {
+        crossword.getCrossword()
+            .then(crossword => {
+                if (crossword === null) {
+                    res.json({ grid: 'No solution found' });
+                }
+                else {
+                    res.json(crossword);
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                res.send(error);
+            });
+    });
+
+
+// REGISTER OUR ROUTES -------------------------------
+// all of our routes will be prefixed with /api
+app.use('/apicw', router);
+
 
 app.listen(app.get('port'), () => console.log('Node app is running on port', app.get('port'), 'and path is', __dirname));

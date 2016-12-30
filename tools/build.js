@@ -30,7 +30,7 @@ webpack(config).run((error, stats) => {
 
     console.log(`Webpack stats: ${stats}`);
 
-  // if we got this far, the build succeeded.
+    // if we got this far, the build succeeded.
     console.log(chalkSuccess('Your app is compiled in production mode in /dist. It\'s ready to roll!'));
 
     return 0;
