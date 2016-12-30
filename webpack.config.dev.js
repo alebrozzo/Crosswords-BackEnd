@@ -1,8 +1,7 @@
-import webpack from 'webpack';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-// import autoprefixer from 'autoprefixer';
-import path from 'path';
-import validate from 'webpack-validator';
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const validate = require('webpack-validator');
 
 const config = {
     resolve: { extensions: ['', '.js', '.jsx'] },
@@ -49,8 +48,8 @@ const config = {
           { test: /\.ico$/, loader: 'file?name=[name].[ext]' },
           { test: /(\.css|\.scss)$/, loaders: ['style', 'css?sourceMap', 'postcss', 'sass?sourceMap'] }
         ]
-    },
+    }
     // postcss: () => [autoprefixer]
 };
 
-export default validate(config, { quiet: false });
+module.exports = validate(config, { quiet: false });
