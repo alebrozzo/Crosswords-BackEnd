@@ -75,6 +75,9 @@ module.exports = {
             { test: /\.ico$/, loader: 'file?name=[name].[ext]' },
             // { test: /(\.css|\.scss)$/, loader: ExtractTextPlugin.extract('css?sourceMap!postcss!sass?sourceMap') }
         ]
-    }
+    },
+
+    node: { fs: 'empty' }
+
     // postcss: () => [ autoprefixer ]
 };
