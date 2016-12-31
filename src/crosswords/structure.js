@@ -107,7 +107,6 @@ module.exports.createEmptyCrossword = createEmptyCrossword;
 module.exports.fillRandomBlackBoxes = fillRandomBlackBoxes;
 module.exports.writeCrossword = writeCrossword;
 module.exports.setWordNumbers = setWordNumbers;
-module.exports.setWordNumbers = setWordNumbers;
 module.exports.getWordLength = getWordLength;
 
 // // numbers words for references
