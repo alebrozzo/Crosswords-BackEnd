@@ -77,9 +77,10 @@ router.route('/full/:grid')
                 else {
                     res.json(crossword);
                 }
+                console.log('response', res);
             })
             .catch(error => {
-                console.log(error);
+                console.log('error', error);
                 res.send(error);
             });
     });
