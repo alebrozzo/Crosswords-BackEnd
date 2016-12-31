@@ -30,7 +30,10 @@ var router = express.Router();
 router.use(function (req, res, next) {
     // do logging
     console.log('Something is happening:', req);
+    console.log('params:', req.params);
+    console.log('body:', req.body);
     // validations, authorization checks, or conditional serving could also go here
+    //console.log('grid:', req.params.grid || 'no grid');
 
     // make sure we go to the next routes and don't stop here
     next();
@@ -42,12 +45,31 @@ router.get('/', function (req, res) {
 });
 
 // more routes for our API will happen here
-//   on routes that end in /bears
-//   ----------------------------------------------------
-router.route('/full')
+// get a random crossword puzzle
+router.route('/random')
     // define the get verb
     .get(function (req, res) {
         crossword.getCrossword()
+            .then(crossword => {
+                if (crossword === null) {
+                    res.json({ grid: 'No solution found' });
+                }
+                else {
+                    res.json(crossword);
+                }
+            })
+            .catch(error => {
+                console.log(error);
+                res.send(error);
+            });
+    });
+
+// get a crossword puzzle for a specific grid structure
+router.route('/full/:grid')
+    // define the get verb
+    .get(function (req, res) {
+        console.log('grid parsed', JSON.parse(req.params.grid));
+        crossword.getCrossword(JSON.parse(req.params.grid))
             .then(crossword => {
                 if (crossword === null) {
                     res.json({ grid: 'No solution found' });
