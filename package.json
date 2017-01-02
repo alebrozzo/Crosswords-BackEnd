@@ -1,6 +1,7 @@
 {
   "name": "crossword-puzzle",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "engines": {"node": "6.7.0"},
   "description": "A crosswords puzzle generator",
   "main": "crosswords.js",
   "scripts": {
