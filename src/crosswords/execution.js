@@ -32,7 +32,7 @@ function getCrossword(gridStructure) {
         // get the dictionary and fill the crossword object.
         promisifications.readFilePromisified(path.resolve(__dirname, 'wordList.js'))
             .then(wordList => {
-                console.log('file red: ', path.resolve(__dirname, 'wordList.js'));
+                console.log('file first line: ', wordList.split('\r\n')[0]);
                 const wordListSplit = arrays.shuffleFlatArray(wordList.split('\r\n'));
                 crossword = functionality.fillCrossword(crossword, wordListSplit);
                 console.log('execution cpu usage: ', process.cpuUsage(startUsage));
