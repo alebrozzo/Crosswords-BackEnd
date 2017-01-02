@@ -11,7 +11,7 @@ function getCrossword(gridStructure) {
 
     return new Promise(function (resolve, reject) {
 
-        //const startUsage = process.cpuUsage();
+        const startUsage = process.cpuUsage();
 
         // set the initial crossword.
         let crossword;
@@ -32,13 +32,15 @@ function getCrossword(gridStructure) {
         // get the dictionary and fill the crossword object.
         promisifications.readFilePromisified(path.resolve(__dirname, 'wordList.js'))
             .then(wordList => {
+                console.log('file red: ', path.resolve(__dirname, 'wordList.js'));
                 const wordListSplit = arrays.shuffleFlatArray(wordList.split('\r\n'));
                 crossword = functionality.fillCrossword(crossword, wordListSplit);
-                //console.log('usage2: ', process.cpuUsage(startUsage));
+                console.log('execution cpu usage: ', process.cpuUsage(startUsage));
                 resolve(crossword);
             })
             .catch(error => {
-                console.log(error);
+                console.log('file attempted: ', path.resolve(__dirname, 'wordList.js'));
+                console.log('error at execution:', error);
                 reject(error);
             });
 
