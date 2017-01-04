@@ -29,7 +29,7 @@ var router = express.Router();
 // middleware to use for all requests
 router.use(function (req, res, next) {
     // do logging
-    console.log('Something is happening:', req);
+    console.log('Something is happening!', new Date().toJSON());
     // console.log('params:', req.params);
     // console.log('body:', req.body);
     // validations, authorization checks, or conditional serving could also go here
