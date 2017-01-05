@@ -36,7 +36,9 @@ function getCrossword(gridStructure) {
                 const wordListSplit = arrays.shuffleFlatArray(wordList.split(newLineCaracter));
                 crossword = functionality.fillCrossword(crossword, wordListSplit);
                 console.log('execution cpu usage: ', process.cpuUsage(startUsage));
-                resolve(JSON.stringify(crossword));
+                //console.log('return crossword:', crossword);
+                //console.log('return crossword JSON:', JSON.stringify(crossword));
+                resolve(crossword);
             })
             .catch(error => {
                 console.log('file attempted: ', path.resolve(__dirname, 'wordList.js'));
