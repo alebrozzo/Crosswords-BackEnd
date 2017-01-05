@@ -29,7 +29,7 @@ var router = express.Router();
 // middleware to use for all requests
 router.use(function (req, res, next) {
     // do logging
-    console.log('Something is happening!', new Date().toJSON());
+    console.log('\nSomething is happening!', new Date().toJSON());
     // console.log('params:', req.params);
     // console.log('body:', req.body);
     // validations, authorization checks, or conditional serving could also go here
@@ -49,17 +49,19 @@ router.get('/', function (req, res) {
 router.route('/random')
     // define the get verb
     .get(function (req, res) {
+        console.log('Random crossword requested');
         crossword.getCrossword()
             .then(crossword => {
                 if (crossword === null) {
                     res.json({ grid: 'No solution found for random' });
                 }
                 else {
-                    res.json(crossword);
+                    //console.log('cr random', crossword);
+                    res.json(JSON.stringify(crossword));
                 }
             })
             .catch(error => {
-                console.log(error);
+                console.log('error:', error);
                 res.send(error);
             });
     });
@@ -68,14 +70,15 @@ router.route('/random')
 router.route('/full/:grid')
     // define the get verb
     .get(function (req, res) {
-        console.log('grid parsed', JSON.parse(req.params.grid));
+        console.log('Full crossord requested. Structure:', JSON.parse(req.params.grid));
         crossword.getCrossword(JSON.parse(req.params.grid))
             .then(crossword => {
                 if (crossword === null) {
                     res.json({ grid: 'No solution found for ' + req.params.grid });
                 }
                 else {
-                    res.json(crossword);
+                    //console.log('cr full', crossword);
+                    res.json(JSON.stringify(crossword));
                 }
                 //console.log('response', res);
             })
