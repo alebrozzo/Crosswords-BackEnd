@@ -14,6 +14,13 @@ app.use(express.static(`${__dirname}/dist`));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// allow for cross domain requests
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 // views is directory for all template files
 // app.set('views', `${__dirname}/views`);
 // app.set('view engine', 'ejs');
