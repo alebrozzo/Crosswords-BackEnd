@@ -151,7 +151,7 @@ function fillNextHorizontalWord(crossword, dictionary, index) {
 // Fills the vertical words once the horizontal words are filled.
 function fillVerticalWords(crossword, dictionary) {
     let newCrossword = JSON.parse(JSON.stringify(crossword));
-    const currentWords = getUsedWords(currentCrossword);
+    const currentWords = getUsedWords(newCrossword);
     let searchPattern = null;
     let potentialWord = null;
     for (let i = 0; i < crossword.verticalWords.length; i++) {
