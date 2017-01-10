@@ -151,11 +151,12 @@ function fillNextHorizontalWord(crossword, dictionary, index) {
 // Fills the vertical words once the horizontal words are filled.
 function fillVerticalWords(crossword, dictionary) {
     let newCrossword = JSON.parse(JSON.stringify(crossword));
+    const currentWords = getUsedWords(currentCrossword);
     let searchPattern = null;
     let potentialWord = null;
     for (let i = 0; i < crossword.verticalWords.length; i++) {
         searchPattern = getSearchPattern(crossword.grid, crossword.verticalWords[ i ].cell, 'V');
-        potentialWord = findWord(dictionary, searchPattern);
+        potentialWord = findWord(dictionary, searchPattern, currentWords);
         // TODO: remove potential word from the dictionary
         if (potentialWord === null) {
             newCrossword = null;
@@ -163,6 +164,7 @@ function fillVerticalWords(crossword, dictionary) {
         }
         else {
             newCrossword = writeWord(newCrossword, 'V', i, potentialWord);
+            currentWords.push(potentialWord);
         }
     }
     return newCrossword;
