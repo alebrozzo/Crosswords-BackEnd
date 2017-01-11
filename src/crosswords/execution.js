@@ -34,12 +34,29 @@ function getCrossword(gridStructure) {
             .then(wordList => {
                 const newLineCaracter = process.platform === 'win32' ? '\r\n' : '\n';
                 const wordListSplit = arrays.shuffleFlatArray(wordList.split(newLineCaracter));
-                crossword = functionality.fillCrossword(crossword, wordListSplit);
-                console.log('execution cpu usage: ', process.cpuUsage(startUsage));
+                return Promise.resolve(functionality.fillGrid(crossword, wordListSplit));
+            })
+            .then(filledCrossword => {
                 //console.log('return crossword:', crossword);
                 //console.log('return crossword JSON:', JSON.stringify(crossword));
-                resolve(crossword);
+                return Promise.all([
+                    functionality.getWordsDefinitions(filledCrossword.horizontalWords),
+                    functionality.getWordsDefinitions(filledCrossword.verticalWords)
+                ]).then(definitions => {
+                    filledCrossword.horizontalWords = definitions[ 0 ];
+                    filledCrossword.verticalWords = definitions[ 1 ];
+                    console.log('execution cpu usage: ', process.cpuUsage(startUsage));
+                    resolve(filledCrossword);
+                })
             })
+            // .then(crossword => {
+            //     console.log('execution cpu usage2: ', process.cpuUsage(startUsage));
+            //     //console.log('return crossword:', crossword);
+            //     //console.log('return crossword JSON:', JSON.stringify(crossword));
+            //     filledCrossword.horizontalWords = getWordsDefinitions(filledCrossword.horizontalWords);
+            //     filledCrossword.verticalWords = getWordsDefinitions(filledCrossword.verticalWords);
+            //     resolve(crossword);
+            // })
             .catch(error => {
                 console.log('file attempted: ', path.resolve(__dirname, 'wordList.js'));
                 console.log('error at execution:', error);

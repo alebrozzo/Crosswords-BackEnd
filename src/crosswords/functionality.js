@@ -1,3 +1,4 @@
+const getRequestPromisified = require('../helpers/promisifications').getRequestPromisified;
 const exceptions = require('../helpers/exceptions');
 const Exception = exceptions.Exception;
 
@@ -172,13 +173,97 @@ function fillVerticalWords(crossword, dictionary) {
 
 // Returns a fully filled crossword puzzle matching the empty puzzle sent as parameter, using the given dictionary.
 // Returns null if not possible to fill the puzzle.
-function fillCrossword(crossword, dictionary) {
+function fillGrid(crossword, dictionary) {
     let filledCrossword = fillNextHorizontalWord(crossword, dictionary, 0);
     if (filledCrossword !== null) {
-        // TODO: dictionary should not have already used words.
         filledCrossword = fillVerticalWords(filledCrossword, dictionary);
     }
     return filledCrossword;
+}
+
+// Returns a Promise with all words definitions
+function getWordsDefinitions(wordArray) {
+    const newArray = wordArray.map(elem => Object.assign({}, elem));
+    const words = [];
+    for (let i = 0; i < newArray.length; i++) {
+        words.push(newArray[ i ].word);
+    }
+    return Promise.all(words.map(getWordDefinition))
+        .then(definitions => {
+            for (let i = 0; i < newArray.length; i++) {
+                newArray[ i ].definition = definitions[ i ];
+            }
+            //console.log('definitions!', newArray);
+            return newArray;
+        })
+        .catch(err => { console.log('error at getWordsDefinitions', err); throw err });
+}
+
+// Extracts a single random definition of an array of objects
+function extractDefinition(definitionObjectArray, word) {
+    const defCount = definitionObjectArray.length;
+    if (defCount === 0) {
+        return word;
+    }
+    else {
+        const definitionToUse = Math.floor(Math.random() * defCount);
+        //console.log('def:', word, definitionObjectArray[ definitionToUse ].text);
+        return definitionObjectArray[ definitionToUse ].text.split(':')[0]; // remove the text after colon as it usually an example use of the word
+    }
+}
+
+// Searches an api for a word definition
+function getWordDefinition(word) {
+    //console.log('word:', word);
+    return getRequestPromisified(`http://api.wordnik.com:80/v4/word.json/${word.toLowerCase()}/definitions?limit=20&sourceDictionaries=webster&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5`)
+        .then(json => extractDefinition(JSON.parse(json), word))
+        .catch(err => { console.log('error at getWordDefinition', err); throw err });
+    /*
+    const options = {
+        method: 'GET',
+        url: `http://api.wordnik.com:80/v4/word.json/${word.toLowerCase()}/definitions`,
+        qs: {
+            limit: '20',
+            sourceDictionaries: 'all',
+            api_key: 'a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5'
+        },
+        qsStringifyOptions: {
+            encoding: false
+        }
+    };
+    console.log('ti', options.url);
+    request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+        const definitions = JSON.parse(body);
+        //console.log('defs:\n', definitions, '\n', '####');
+        const defCount = definitions.length;
+        if (defCount === 0) {
+            return word;
+        }
+        else {
+            const definitionToUse = Math.floor(Math.random() * defCount);
+            //console.log('word:', word, 'defcount:', defCount, definitionToUse, '\ndef2use', definitions[ definitionToUse ].text);
+            return definitions[ definitionToUse ].text;
+        }
+    });
+    */
+    /*
+    fetch(`http://api.wordnik.com:80/v4/word.json/${word}/definitions?limit=20&sourceDictionaries=all&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5`)
+        .then(response => response.json())
+        .then(json => {
+            JSON.parse(json);
+            console.log('defs:', definitions);
+            const defCount = definitions.length;
+            if (defCount === 0) {
+                return word;
+            }
+            else {
+                const definitionToUse = Math.floor(Math.random() * defCount);
+                return definitions[ definitionToUse ].text;
+            }
+        })
+        .catch(err => { console.log('error!', err); throw err });
+    */
 }
 
 // export { findWord, writeWord, getSearchPattern, existVerticalsWithCurentHorizontal, fillNextHorizontalWord };
@@ -189,4 +274,6 @@ module.exports.getUsedWords = getUsedWords;
 module.exports.existVerticalsWithCurentHorizontal = existVerticalsWithCurentHorizontal;
 module.exports.fillNextHorizontalWord = fillNextHorizontalWord;
 module.exports.fillVerticalWords = fillVerticalWords;
-module.exports.fillCrossword = fillCrossword;
+module.exports.fillGrid = fillGrid;
+module.exports.getWordDefinition = getWordDefinition;
+module.exports.getWordsDefinitions = getWordsDefinitions;
