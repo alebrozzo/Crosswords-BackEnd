@@ -7,12 +7,6 @@ const crossword = require('./src/crosswords/execution');
 
 
 app.set('port', process.env.PORT || 5000);
-app.use(express.static(`${__dirname}/dist`));
-
-// configure app to use bodyParser()
-// this will let us get the data from a POST
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 // allow for cross domain requests
 app.use(function (req, res, next) {
@@ -20,6 +14,13 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+
+app.use(express.static(`${__dirname}/dist`));
+
+// configure app to use bodyParser()
+// this will let us get the data from a POST
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // views is directory for all template files
 // app.set('views', `${__dirname}/views`);
