@@ -208,7 +208,7 @@ function extractDefinition(definitionObjectArray, word) {
     else {
         const definitionToUse = Math.floor(Math.random() * defCount);
         //console.log('def:', word, definitionObjectArray[ definitionToUse ].text);
-        return definitionObjectArray[ definitionToUse ].text.split(':')[0]; // remove the text after colon as it usually an example use of the word
+        return (definitionObjectArray[ definitionToUse ].text || word).split(':')[0]; // return original word if no results. remove the text after colon as it usually an example use of the word
     }
 }
 
