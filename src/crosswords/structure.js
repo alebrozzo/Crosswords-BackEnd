@@ -1,12 +1,12 @@
 /* eslint no-magic-numbers: "off" */
-const BlackBox = '#';
+const BlackBox = "#";
 // const LetterBox = '_';
 
 // creates a new crossword of the given dimenssions (defaults to 8x8)
 function createEmptyCrossword(rowCount = 8, columnCount = 8) {
     const newGrid = new Array(rowCount);
     for (let row = 0; row < rowCount; row++) {
-        newGrid[ row ] = new Array(columnCount);
+        newGrid[row] = new Array(columnCount);
     }
     const crosswordObject = {};
     crosswordObject.grid = JSON.parse(JSON.stringify(newGrid));
@@ -19,36 +19,35 @@ function createEmptyCrossword(rowCount = 8, columnCount = 8) {
 function fillRandomBlackBoxes(grid, blackBoxCount) {
     // TODO: fixed for now
     const newGrid = JSON.parse(JSON.stringify(grid));
-    newGrid[ 0 ][ 3 ] = BlackBox;
-    newGrid[ 1 ][ 2 ] = BlackBox;
-    newGrid[ 2 ][ 1 ] = BlackBox;
-    newGrid[ 3 ][ 4 ] = BlackBox;
+    newGrid[0][3] = BlackBox;
+    newGrid[1][2] = BlackBox;
+    newGrid[2][1] = BlackBox;
+    newGrid[3][4] = BlackBox;
     return newGrid;
 }
 
 // writes the crossword using the function passed (console.log if missing)
 function writeCrossword(crossword, writer = console.log) {
-    writer('grid:\n');
+    writer("grid:\n");
     for (let row = 0; row < crossword.grid.length; row++) {
-        writer(crossword.grid[ row ]);
+        writer(crossword.grid[row]);
     }
-    writer('Horizontals:', crossword.horizontalWords);
-    writer('Verticals:', crossword.verticalWords);
+    writer("Horizontals:", crossword.horizontalWords);
+    writer("Verticals:", crossword.verticalWords);
 }
 
 // gets the length of a word, assumes row and col is the beggining of the word
 function getWordLength(grid, row, col, direction) {
     let wordLength = 0;
-    if (direction === 'H') {
+    if (direction === "H") {
         let currentCol = col;
-        while (currentCol < grid[ row ].length && grid[ row ][ currentCol ] !== BlackBox) {
+        while (currentCol < grid[row].length && grid[row][currentCol] !== BlackBox) {
             wordLength++;
             currentCol++;
         }
-    }
-    else if (direction === 'V') {
+    } else if (direction === "V") {
         let currentRow = row;
-        while (currentRow < grid.length && grid[ currentRow ][ col ] !== BlackBox) {
+        while (currentRow < grid.length && grid[currentRow][col] !== BlackBox) {
             wordLength++;
             currentRow++;
         }
@@ -64,30 +63,38 @@ function setWordNumbers(crossword) {
     let wordStarts = false;
 
     for (let row = 0; row < newCrossword.grid.length; row++) {
-        for (let col = 0; col < newCrossword.grid[ row ].length; col++) {
+        for (let col = 0; col < newCrossword.grid[row].length; col++) {
             // if an horizontal word begins, add it to the array
-            if (col < newCrossword.grid[ row ].length - 1 // last colum cannot have starting horizontal words, and should add check later if not testing for column index here
-                && newCrossword.grid[ row ][ col ] !== BlackBox
-                && (col === 0 || newCrossword.grid[ row ][ col - 1 ] === BlackBox) && newCrossword.grid[ row ][ col + 1 ] !== BlackBox) { // if (first col or prior cell has black box), and not a black box follows, a new word begins on row
+            if (
+                col < newCrossword.grid[row].length - 1 && // last colum cannot have starting horizontal words, and should add check later if not testing for column index here
+                newCrossword.grid[row][col] !== BlackBox &&
+                (col === 0 || newCrossword.grid[row][col - 1] === BlackBox) &&
+                newCrossword.grid[row][col + 1] !== BlackBox
+            ) {
+                // if (first col or prior cell has black box), and not a black box follows, a new word begins on row
                 newCrossword.horizontalWords.push({
                     cell: { row, col },
                     definitionNumber: currentNumber,
-                    word: '',
-                    definition: '',
-                    length: getWordLength(newCrossword.grid, row, col, 'H')
+                    word: "",
+                    definition: "",
+                    length: getWordLength(newCrossword.grid, row, col, "H"),
                 });
                 wordStarts = true;
             }
             // if a vertical word begins, add it to the array
-            if (row < newCrossword.grid.length - 1 // last row cannot have starting vertical words; should add check later if not testing for row index here
-                && newCrossword.grid[ row ][ col ] !== BlackBox
-                && (row === 0 || newCrossword.grid[ row - 1 ][ col ] === BlackBox) && newCrossword.grid[ row + 1 ][ col ] !== BlackBox) { // if (first row, or cell above has black box), and not a black box below, a new word begins on column
+            if (
+                row < newCrossword.grid.length - 1 && // last row cannot have starting vertical words; should add check later if not testing for row index here
+                newCrossword.grid[row][col] !== BlackBox &&
+                (row === 0 || newCrossword.grid[row - 1][col] === BlackBox) &&
+                newCrossword.grid[row + 1][col] !== BlackBox
+            ) {
+                // if (first row, or cell above has black box), and not a black box below, a new word begins on column
                 newCrossword.verticalWords.push({
                     cell: { row, col },
                     definitionNumber: currentNumber,
-                    word: '',
-                    definition: '',
-                    length: getWordLength(newCrossword.grid, row, col, 'V')
+                    word: "",
+                    definition: "",
+                    length: getWordLength(newCrossword.grid, row, col, "V"),
                 });
                 wordStarts = true;
             }

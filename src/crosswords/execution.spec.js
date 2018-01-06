@@ -1,7 +1,9 @@
 /* eslint no-magic-numbers: "off" */
 /* eslint no-unused-expressions: "off" */
 
-/* this needs async testnig so I am disabling until I have the chance to check how it's done
+/********************************************************************************************
+* this needs async testing so I am disabling until I have the chance to check how it's done *
+*********************************************************************************************
 const chai = require('chai');
 const expect = chai.expect;
 

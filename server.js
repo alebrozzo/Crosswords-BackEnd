@@ -1,15 +1,14 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 
 // apps
-const crossword = require('./src/crosswords/execution');
+const crossword = require("./src/crosswords/execution");
 
-
-app.set('port', process.env.PORT || 5000);
+app.set("port", process.env.PORT || 5000);
 
 // allow for cross domain requests
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
@@ -35,9 +34,9 @@ app.get('/', (request, response) => response.render(`${__dirname}src/index`));
 // get an instance of the express Router
 var router = express.Router();
 // middleware to use for all requests
-router.use(function (req, res, next) {
+router.use(function(req, res, next) {
     // do logging
-    console.log('\nSomething is happening!', new Date().toJSON());
+    console.log("\nSomething is happening!", new Date().toJSON());
     // console.log('params:', req.params);
     // console.log('body:', req.body);
     // validations, authorization checks, or conditional serving could also go here
@@ -48,58 +47,60 @@ router.use(function (req, res, next) {
 });
 
 // test route to make sure everything is working (accessed at GET http://localhost:5000/api)
-router.get('/', function (req, res) {
-    res.json({ message: 'hooray! welcome to our api!' });
+router.get("/", function(req, res) {
+    res.json({ message: "hooray! welcome to the crossword api!" });
 });
 
 // more routes for our API will happen here
 // get a random crossword puzzle
-router.route('/random')
+router
+    .route("/random")
     // define the get verb
-    .get(function (req, res) {
-        console.log('Random crossword requested');
-        crossword.getCrossword()
+    .get(function(req, res) {
+        console.log("Random crossword requested");
+        crossword
+            .getCrossword()
             .then(crossword => {
                 if (crossword === null) {
-                    res.json({ grid: 'No solution found for random' });
-                }
-                else {
+                    res.json({ grid: "No solution found for random" });
+                } else {
                     //console.log('cr random', crossword);
                     res.json(JSON.stringify(crossword));
                 }
             })
             .catch(error => {
-                console.log('error:', error);
+                console.log("error:", error);
                 res.send(error);
             });
     });
 
 // get a crossword puzzle for a specific grid structure
-router.route('/full/:grid')
+router
+    .route("/full/:grid")
     // define the get verb
-    .get(function (req, res) {
-        console.log('Full crossord requested. Structure:', JSON.parse(req.params.grid));
-        crossword.getCrossword(JSON.parse(req.params.grid))
+    .get(function(req, res) {
+        console.log("Full crossord requested. Structure:", JSON.parse(req.params.grid));
+        crossword
+            .getCrossword(JSON.parse(req.params.grid))
             .then(crossword => {
                 if (crossword === null) {
-                    res.json({ grid: 'No solution found for ' + req.params.grid });
-                }
-                else {
+                    res.json({ grid: "No solution found for " + req.params.grid });
+                } else {
                     //console.log('cr full', crossword);
                     res.json(JSON.stringify(crossword));
                 }
                 //console.log('response', res);
             })
             .catch(error => {
-                console.log('error', error);
+                console.log("error", error);
                 res.send(error);
             });
     });
 
-
 // REGISTER OUR ROUTES -------------------------------
-// all of our routes will be prefixed with /api
-app.use('/apicw', router);
+// routes for crowssword will be prefixed with /apicw
+app.use("/apicw", router);
 
-
-app.listen(app.get('port'), () => console.log('Node app is running on port', app.get('port'), 'and path is', __dirname));
+app.listen(app.get("port"), () =>
+    console.log("Node app is running on port", app.get("port"), "and path is", __dirname)
+);

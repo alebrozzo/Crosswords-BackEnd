@@ -1,12 +1,12 @@
-const execution = require('./execution');
-const structure = require('./structure');
+const execution = require("./execution");
+const structure = require("./structure");
 
-execution.getCrossword()
+execution
+    .getCrossword()
     .then(crossword => {
         if (crossword === null) {
-            console.log('No solution found');
-        }
-        else {
+            console.log("No solution found");
+        } else {
             structure.writeCrossword(crossword, console.log);
         }
     })
