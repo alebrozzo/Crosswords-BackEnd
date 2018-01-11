@@ -339,12 +339,12 @@ describe("Pattern conflict", () => {
     const crossword = structure.setWordNumbers(cwInit);
 
     it("should return true for LE", () => {
-        const verticalsExist = functionality.existVerticalsWithCurentHorizontal(dictionary, crossword, 2);
+        const verticalsExist = functionality.existVerticalsWithCurrentHorizontal(dictionary, crossword, 2);
         expect(verticalsExist).to.be.true;
     });
 
     it("should return false for LE", () => {
-        const verticalsExist = functionality.existVerticalsWithCurentHorizontal(shortDictionary, crossword, 2);
+        const verticalsExist = functionality.existVerticalsWithCurrentHorizontal(shortDictionary, crossword, 2);
         expect(verticalsExist).to.be.false;
     });
 });
@@ -366,12 +366,12 @@ describe("Pattern conflict", () => {
     const crossword = structure.setWordNumbers(cwInit);
 
     it("should return true for LE", () => {
-        const verticalsExist = functionality.existVerticalsWithCurentHorizontal(dictionary, crossword, 2);
+        const verticalsExist = functionality.existVerticalsWithCurrentHorizontal(dictionary, crossword, 2);
         expect(verticalsExist).to.be.true;
     });
 
     it("should return false for LE", () => {
-        const verticalsExist = functionality.existVerticalsWithCurentHorizontal(shortDictionary, crossword, 2);
+        const verticalsExist = functionality.existVerticalsWithCurrentHorizontal(shortDictionary, crossword, 2);
         expect(verticalsExist).to.be.false;
     });
 });
